@@ -1,0 +1,54 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "adfdevfinance02"
+		},
+		"LS_ADLSPAR_ONPRIM_SNK_accountKey": {
+			"value": ""
+		},
+		"LS_Getmetadata_CSV_accountKey": {
+			"value": ""
+		},
+		"LS_Lookup_connectionString": {
+			"value": ""
+		},
+		"LS_METADATA_FILTER_connectionString": {
+			"value": ""
+		},
+		"LS_ONPRIMSQL_SRC_password": {
+			"value": ""
+		},
+		"LS_PAR_SNK_accountKey": {
+			"value": ""
+		},
+		"LS_VALIDATION_connectionString": {
+			"value": ""
+		},
+		"AzureKeyVault1_properties_typeProperties_baseUrl": {
+			"value": "https://keyvaultdata.vault.azure.net/"
+		},
+		"LS_ADLSPAR_ONPRIM_SNK_properties_typeProperties_url": {
+			"value": "https://devfinancegen.dfs.core.windows.net"
+		},
+		"LS_Getmetadata_CSV_properties_typeProperties_url": {
+			"value": "https://devfinancegen.dfs.core.windows.net"
+		},
+		"LS_ONPRIMSQL_SRC_properties_typeProperties_server": {
+			"value": "localhost\\SQLEXPRESS"
+		},
+		"LS_ONPRIMSQL_SRC_properties_typeProperties_database": {
+			"value": "PracticeDB"
+		},
+		"LS_ONPRIMSQL_SRC_properties_typeProperties_userName": {
+			"value": "Dathri"
+		},
+		"LS_PAR_SNK_properties_typeProperties_url": {
+			"value": "https://devfinancegen.dfs.core.windows.net"
+		},
+		"keyvaultdata_properties_typeProperties_baseUrl": {
+			"value": "https://keyvaultdata.vault.azure.net/"
+		}
+	}
+}

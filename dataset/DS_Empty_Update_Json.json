@@ -1,0 +1,21 @@
+{
+	"name": "DS_Empty_Update_Json",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_VALIDATION",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "cdc -1.json",
+				"folderPath": "csvfiles",
+				"container": "incremental"
+			}
+		},
+		"schema": {}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

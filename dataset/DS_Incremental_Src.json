@@ -1,0 +1,28 @@
+{
+	"name": "DS_Incremental_Src",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_VALIDATION",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "cdc.json",
+				"folderPath": "csvfiles",
+				"container": "incremental"
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"Id": {
+					"type": "integer"
+				}
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

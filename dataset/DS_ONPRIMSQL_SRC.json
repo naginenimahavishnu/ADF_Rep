@@ -1,0 +1,36 @@
+{
+	"name": "DS_ONPRIMSQL_SRC",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_ONPRIMSQL_SRC",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "EmpID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "EmpName",
+				"type": "varchar"
+			},
+			{
+				"name": "Department",
+				"type": "varchar"
+			},
+			{
+				"name": "Salary",
+				"type": "int",
+				"precision": 10
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "Orderss"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

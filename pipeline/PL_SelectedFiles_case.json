@@ -24,6 +24,7 @@
 					],
 					"storeSettings": {
 						"type": "AzureBlobStorageReadSettings",
+						"recursive": true,
 						"enablePartitionDiscovery": false
 					},
 					"formatSettings": {
@@ -92,7 +93,11 @@
 												"inputs": [
 													{
 														"referenceName": "DS_Copy_Srccase_Files",
-														"type": "DatasetReference"
+														"type": "DatasetReference",
+														"parameters": {
+															"container": "case",
+															"directory": "files"
+														}
 													}
 												]
 											}

@@ -118,8 +118,8 @@
 														"referenceName": "DS_SELCASE_SNK",
 														"type": "DatasetReference",
 														"parameters": {
-															"container": "cust",
-															"directory": "''",
+															"container": "switchcasae",
+															"directory": "customer",
 															"file": {
 																"value": "@item().name",
 																"type": "Expression"
@@ -187,8 +187,8 @@
 														"referenceName": "DS_SELCASE_SNK",
 														"type": "DatasetReference",
 														"parameters": {
-															"container": "driver",
-															"directory": "''",
+															"container": "switchcasae",
+															"directory": "driver",
 															"file": {
 																"value": "@item().name",
 																"type": "Expression"
@@ -256,8 +256,8 @@
 														"referenceName": "DS_SELCASE_SNK",
 														"type": "DatasetReference",
 														"parameters": {
-															"container": "trip",
-															"directory": "''",
+															"container": "switchcasae",
+															"directory": "trip",
 															"file": {
 																"value": "@item().name",
 																"type": "Expression"

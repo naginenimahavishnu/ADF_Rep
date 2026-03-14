@@ -16,12 +16,10 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataset": {
-						"referenceName": "DS_src_selFile_Scase",
+						"referenceName": "DS_Case_Metadata",
 						"type": "DatasetReference"
 					},
-					"fieldList": [
-						"childItems"
-					],
+					"fieldList": [],
 					"storeSettings": {
 						"type": "AzureBlobStorageReadSettings",
 						"recursive": true,
@@ -101,30 +99,14 @@
 												},
 												"inputs": [
 													{
-														"referenceName": "DS_Copy_Srccase_Files",
-														"type": "DatasetReference",
-														"parameters": {
-															"container": "case",
-															"directory": "files",
-															"file": {
-																"value": "@item().name",
-																"type": "Expression"
-															}
-														}
+														"referenceName": "DS_Case_Src",
+														"type": "DatasetReference"
 													}
 												],
 												"outputs": [
 													{
-														"referenceName": "DS_SELCASE_SNK",
-														"type": "DatasetReference",
-														"parameters": {
-															"file": {
-																"value": "@item().name",
-																"type": "Expression"
-															},
-															"Directory": "customer",
-															"container": "switchcasae"
-														}
+														"referenceName": "DS_Case_SNK",
+														"type": "DatasetReference"
 													}
 												]
 											}

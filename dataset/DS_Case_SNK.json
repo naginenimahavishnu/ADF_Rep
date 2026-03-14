@@ -1,0 +1,19 @@
+{
+	"name": "DS_Case_SNK",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_ADLSPAR_ONPRIM_SNK",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "customer",
+				"fileSystem": "switchcasae"
+			}
+		},
+		"schema": {}
+	}
+}

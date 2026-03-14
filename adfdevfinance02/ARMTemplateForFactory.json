@@ -583,6 +583,10 @@
 					"schema": {
 						"type": "string",
 						"defaultValue": "dbo"
+					},
+					"Id": {
+						"type": "string",
+						"defaultValue": "123"
 					}
 				},
 				"annotations": [],

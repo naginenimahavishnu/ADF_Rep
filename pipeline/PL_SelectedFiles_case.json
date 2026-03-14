@@ -104,10 +104,8 @@
 														"referenceName": "DS_Copy_Srccase_Files",
 														"type": "DatasetReference",
 														"parameters": {
-															"file": {
-																"value": "@item().name",
-																"type": "Expression"
-															}
+															"container": "case",
+															"directory": "files"
 														}
 													}
 												],
@@ -234,10 +232,7 @@
 														"referenceName": "DS_Copy_Srccase_Files",
 														"type": "DatasetReference",
 														"parameters": {
-															"file": {
-																"value": "@item().name",
-																"type": "Expression"
-															}
+															"directory": "files"
 														}
 													}
 												],

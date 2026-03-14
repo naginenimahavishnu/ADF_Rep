@@ -116,17 +116,154 @@
 												"outputs": [
 													{
 														"referenceName": "DS_SELCASE_SNK",
-														"type": "DatasetReference"
+														"type": "DatasetReference",
+														"parameters": {
+															"container": "cust",
+															"file": {
+																"value": "@item().name",
+																"type": "Expression"
+															}
+														}
 													}
 												]
 											}
 										]
 									},
 									{
-										"value": "drivers"
+										"value": "drivers",
+										"activities": [
+											{
+												"name": "Copy_drivers",
+												"type": "Copy",
+												"dependsOn": [],
+												"policy": {
+													"timeout": "0.12:00:00",
+													"retry": 0,
+													"retryIntervalInSeconds": 30,
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"source": {
+														"type": "DelimitedTextSource",
+														"storeSettings": {
+															"type": "AzureBlobStorageReadSettings",
+															"recursive": true,
+															"enablePartitionDiscovery": false
+														},
+														"formatSettings": {
+															"type": "DelimitedTextReadSettings"
+														}
+													},
+													"sink": {
+														"type": "JsonSink",
+														"storeSettings": {
+															"type": "AzureBlobFSWriteSettings"
+														},
+														"formatSettings": {
+															"type": "JsonWriteSettings"
+														}
+													},
+													"enableStaging": false
+												},
+												"inputs": [
+													{
+														"referenceName": "DS_Copy_Srccase_Files",
+														"type": "DatasetReference",
+														"parameters": {
+															"container": "case",
+															"directory": "files",
+															"file": {
+																"value": "@item().name",
+																"type": "Expression"
+															}
+														}
+													}
+												],
+												"outputs": [
+													{
+														"referenceName": "DS_SELCASE_SNK",
+														"type": "DatasetReference",
+														"parameters": {
+															"container": "driver",
+															"file": {
+																"value": "@item().name",
+																"type": "Expression"
+															}
+														}
+													}
+												]
+											}
+										]
 									},
 									{
-										"value": "trips"
+										"value": "trips",
+										"activities": [
+											{
+												"name": "Copy_trip",
+												"type": "Copy",
+												"dependsOn": [],
+												"policy": {
+													"timeout": "0.12:00:00",
+													"retry": 0,
+													"retryIntervalInSeconds": 30,
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"source": {
+														"type": "DelimitedTextSource",
+														"storeSettings": {
+															"type": "AzureBlobStorageReadSettings",
+															"recursive": true,
+															"enablePartitionDiscovery": false
+														},
+														"formatSettings": {
+															"type": "DelimitedTextReadSettings"
+														}
+													},
+													"sink": {
+														"type": "JsonSink",
+														"storeSettings": {
+															"type": "AzureBlobFSWriteSettings"
+														},
+														"formatSettings": {
+															"type": "JsonWriteSettings"
+														}
+													},
+													"enableStaging": false
+												},
+												"inputs": [
+													{
+														"referenceName": "DS_Copy_Srccase_Files",
+														"type": "DatasetReference",
+														"parameters": {
+															"container": "case",
+															"directory": "files",
+															"file": {
+																"value": "@item().name",
+																"type": "Expression"
+															}
+														}
+													}
+												],
+												"outputs": [
+													{
+														"referenceName": "DS_SELCASE_SNK",
+														"type": "DatasetReference",
+														"parameters": {
+															"container": "trip",
+															"file": {
+																"value": "@item().name",
+																"type": "Expression"
+															}
+														}
+													}
+												]
+											}
+										]
 									}
 								]
 							}

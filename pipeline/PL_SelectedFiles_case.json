@@ -238,7 +238,12 @@
 														"referenceName": "DS_Copy_Srccase_Files",
 														"type": "DatasetReference",
 														"parameters": {
-															"directory": "files"
+															"container": "case",
+															"directory": "files",
+															"file": {
+																"value": "@item().name",
+																"type": "Expression"
+															}
 														}
 													}
 												],
@@ -250,7 +255,9 @@
 															"file": {
 																"value": "@item().name",
 																"type": "Expression"
-															}
+															},
+															"Directory": "customer",
+															"container": "switchcasae"
 														}
 													}
 												]

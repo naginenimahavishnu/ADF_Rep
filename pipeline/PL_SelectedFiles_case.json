@@ -118,6 +118,8 @@
 														"referenceName": "DS_Case_SNK",
 														"type": "DatasetReference",
 														"parameters": {
+															"container": "switchcase",
+															"directory": "customers",
 															"file": {
 																"value": "@item().name",
 																"type": "Expression"

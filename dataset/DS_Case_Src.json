@@ -5,13 +5,34 @@
 			"referenceName": "LS_Lookup",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"cont": {
+				"type": "string"
+			},
+			"dir": {
+				"type": "string"
+			},
+			"file": {
+				"type": "string"
+			}
+		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"folderPath": "files",
-				"container": "case"
+				"fileName": {
+					"value": "@dataset().file",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@dataset().dir",
+					"type": "Expression"
+				},
+				"container": {
+					"value": "@dataset().cont",
+					"type": "Expression"
+				}
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",

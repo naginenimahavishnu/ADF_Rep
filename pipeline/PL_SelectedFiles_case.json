@@ -57,12 +57,12 @@
 							"userProperties": [],
 							"typeProperties": {
 								"on": {
-									"value": "@item().name[0]",
+									"value": "@item().name",
 									"type": "Expression"
 								},
 								"cases": [
 									{
-										"value": "customers",
+										"value": "customers.csv",
 										"activities": [
 											{
 												"name": "Copy_Customers",
@@ -127,7 +127,7 @@
 										]
 									},
 									{
-										"value": "drivers",
+										"value": "drivers.csv",
 										"activities": [
 											{
 												"name": "Copy_drivers",
@@ -192,7 +192,7 @@
 										]
 									},
 									{
-										"value": "trips",
+										"value": "trips.csv",
 										"activities": [
 											{
 												"name": "Copy_trip",

@@ -8,6 +8,14 @@
 		"parameters": {
 			"file": {
 				"type": "string"
+			},
+			"container": {
+				"type": "string",
+				"defaultValue": "case"
+			},
+			"directory": {
+				"type": "string",
+				"defaultValue": "files"
 			}
 		},
 		"annotations": [],

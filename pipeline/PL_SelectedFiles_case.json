@@ -119,6 +119,7 @@
 														"type": "DatasetReference",
 														"parameters": {
 															"container": "cust",
+															"directory": "''",
 															"file": {
 																"value": "@item().name",
 																"type": "Expression"
@@ -187,6 +188,7 @@
 														"type": "DatasetReference",
 														"parameters": {
 															"container": "driver",
+															"directory": "''",
 															"file": {
 																"value": "@item().name",
 																"type": "Expression"
@@ -255,6 +257,7 @@
 														"type": "DatasetReference",
 														"parameters": {
 															"container": "trip",
+															"directory": "''",
 															"file": {
 																"value": "@item().name",
 																"type": "Expression"

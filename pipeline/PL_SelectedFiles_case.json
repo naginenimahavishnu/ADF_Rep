@@ -116,7 +116,15 @@
 												"outputs": [
 													{
 														"referenceName": "DS_Case_SNK",
-														"type": "DatasetReference"
+														"type": "DatasetReference",
+														"parameters": {
+															"cont": "switchcase",
+															"dir": "customers",
+															"file": {
+																"value": "@item().name",
+																"type": "Expression"
+															}
+														}
 													}
 												]
 											}

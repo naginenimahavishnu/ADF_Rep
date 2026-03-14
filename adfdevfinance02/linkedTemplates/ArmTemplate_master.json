@@ -112,9 +112,6 @@
 					"LS_VALIDATION_connectionString": {
 						"value": "[parameters('LS_VALIDATION_connectionString')]"
 					},
-					"LS_ONPRIMSQL_SRC_password": {
-						"value": "[parameters('LS_ONPRIMSQL_SRC_password')]"
-					},
 					"AzureKeyVault1_properties_typeProperties_baseUrl": {
 						"value": "[parameters('AzureKeyVault1_properties_typeProperties_baseUrl')]"
 					},
@@ -129,15 +126,6 @@
 					},
 					"keyvaultdata_properties_typeProperties_baseUrl": {
 						"value": "[parameters('keyvaultdata_properties_typeProperties_baseUrl')]"
-					},
-					"LS_ONPRIMSQL_SRC_properties_typeProperties_server": {
-						"value": "[parameters('LS_ONPRIMSQL_SRC_properties_typeProperties_server')]"
-					},
-					"LS_ONPRIMSQL_SRC_properties_typeProperties_database": {
-						"value": "[parameters('LS_ONPRIMSQL_SRC_properties_typeProperties_database')]"
-					},
-					"LS_ONPRIMSQL_SRC_properties_typeProperties_userName": {
-						"value": "[parameters('LS_ONPRIMSQL_SRC_properties_typeProperties_userName')]"
 					}
 				}
 			},
@@ -156,6 +144,18 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
+					},
+					"LS_ONPRIMSQL_SRC_password": {
+						"value": "[parameters('LS_ONPRIMSQL_SRC_password')]"
+					},
+					"LS_ONPRIMSQL_SRC_properties_typeProperties_server": {
+						"value": "[parameters('LS_ONPRIMSQL_SRC_properties_typeProperties_server')]"
+					},
+					"LS_ONPRIMSQL_SRC_properties_typeProperties_database": {
+						"value": "[parameters('LS_ONPRIMSQL_SRC_properties_typeProperties_database')]"
+					},
+					"LS_ONPRIMSQL_SRC_properties_typeProperties_userName": {
+						"value": "[parameters('LS_ONPRIMSQL_SRC_properties_typeProperties_userName')]"
 					}
 				}
 			},

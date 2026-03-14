@@ -6,12 +6,54 @@
 			"type": "string",
 			"metadata": "Data Factory name",
 			"defaultValue": "adfdevfinance02"
+		},
+		"LS_ONPRIMSQL_SRC_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'LS_ONPRIMSQL_SRC'"
+		},
+		"LS_ONPRIMSQL_SRC_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "localhost\\SQLEXPRESS"
+		},
+		"LS_ONPRIMSQL_SRC_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "PracticeDB"
+		},
+		"LS_ONPRIMSQL_SRC_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "Dathri"
 		}
 	},
 	"variables": {
 		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
 	},
 	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/LS_ONPRIMSQL_SRC')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "SqlServer",
+				"typeProperties": {
+					"server": "[parameters('LS_ONPRIMSQL_SRC_properties_typeProperties_server')]",
+					"database": "[parameters('LS_ONPRIMSQL_SRC_properties_typeProperties_database')]",
+					"encrypt": "optional",
+					"trustServerCertificate": false,
+					"authenticationType": "SQL",
+					"userName": "[parameters('LS_ONPRIMSQL_SRC_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('LS_ONPRIMSQL_SRC_password')]"
+					}
+				},
+				"connectVia": {
+					"referenceName": "SelfintegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": []
+		},
 		{
 			"name": "[concat(parameters('factoryName'), '/PL_LOOKUP')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
@@ -313,7 +355,9 @@
 				"annotations": [],
 				"lastPublishTime": "2026-03-11T18:26:11Z"
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_ONPRIMSQL_SRC')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/DS_ONPRIMSQL_SRC')]",
@@ -351,7 +395,9 @@
 					"table": "Orderss"
 				}
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_ONPRIMSQL_SRC')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/PL_Audit_Logs')]",
@@ -539,7 +585,8 @@
 				"lastPublishTime": "2026-03-11T07:35:15Z"
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/DS_ONPRIMSQL_SRC')]"
+				"[concat(variables('factoryId'), '/datasets/DS_ONPRIMSQL_SRC')]",
+				"[concat(variables('factoryId'), '/linkedServices/LS_ONPRIMSQL_SRC')]"
 			]
 		},
 		{
@@ -648,7 +695,7 @@
 								{
 									"type": "Query",
 									"text": {
-										"value": "select count(*) as Total from @{pipeline().parameters.schema}.@{pipeline().parameters.table} where order_id > '@{activity('Load_cdc').output.value[0].Id}'",
+										"value": "select count(*) as Total from @{pipeline().parameters.schema}.@{pipeline().parameters.table} where order_id > '@{if(empty(pipeline().parameters.Id),activity('Load_cdc').output.value[0].Id,pipeline().parameters.Id)}'",
 										"type": "Expression"
 									}
 								}
@@ -690,7 +737,7 @@
 										"source": {
 											"type": "SqlServerSource",
 											"sqlReaderQuery": {
-												"value": "select * from @{pipeline().parameters.schema}.@{pipeline().parameters.table} where order_id > '@{activity('Load_cdc').output.value[0].Id}'",
+												"value": "select * from @{pipeline().parameters.schema}.@{pipeline().parameters.table} where order_id > '@{if(empty(pipeline().parameters.Id),activity('Load_cdc').output.value[0].Id, pipeline().parameters.Id)}'",
 												"type": "Expression"
 											},
 											"queryTimeout": "02:00:00",
@@ -865,13 +912,14 @@
 					},
 					"Id": {
 						"type": "string",
-						"defaultValue": "123"
+						"defaultValue": "9"
 					}
 				},
 				"annotations": [],
 				"lastPublishTime": "2026-03-13T09:38:09Z"
 			},
 			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_ONPRIMSQL_SRC')]",
 				"[concat(variables('factoryId'), '/datasets/DS_ONPRIMSQL_SRC')]"
 			]
 		},

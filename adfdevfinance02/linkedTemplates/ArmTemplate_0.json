@@ -31,10 +31,6 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'LS_VALIDATION'"
 		},
-		"LS_ONPRIMSQL_SRC_password": {
-			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'LS_ONPRIMSQL_SRC'"
-		},
 		"AzureKeyVault1_properties_typeProperties_baseUrl": {
 			"type": "string",
 			"defaultValue": "https://keyvaultdata.vault.azure.net/"
@@ -54,18 +50,6 @@
 		"keyvaultdata_properties_typeProperties_baseUrl": {
 			"type": "string",
 			"defaultValue": "https://keyvaultdata.vault.azure.net/"
-		},
-		"LS_ONPRIMSQL_SRC_properties_typeProperties_server": {
-			"type": "string",
-			"defaultValue": "localhost\\SQLEXPRESS"
-		},
-		"LS_ONPRIMSQL_SRC_properties_typeProperties_database": {
-			"type": "string",
-			"defaultValue": "PracticeDB"
-		},
-		"LS_ONPRIMSQL_SRC_properties_typeProperties_userName": {
-			"type": "string",
-			"defaultValue": "Dathri"
 		}
 	},
 	"variables": {
@@ -195,6 +179,18 @@
 			"properties": {
 				"type": "SelfHosted",
 				"typeProperties": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
 			},
 			"dependsOn": []
 		},
@@ -622,34 +618,6 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/LS_Getmetadata_CSV')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/LS_ONPRIMSQL_SRC')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "SqlServer",
-				"typeProperties": {
-					"server": "[parameters('LS_ONPRIMSQL_SRC_properties_typeProperties_server')]",
-					"database": "[parameters('LS_ONPRIMSQL_SRC_properties_typeProperties_database')]",
-					"encrypt": "optional",
-					"trustServerCertificate": false,
-					"authenticationType": "SQL",
-					"userName": "[parameters('LS_ONPRIMSQL_SRC_properties_typeProperties_userName')]",
-					"password": {
-						"type": "SecureString",
-						"value": "[parameters('LS_ONPRIMSQL_SRC_password')]"
-					}
-				},
-				"connectVia": {
-					"referenceName": "SelfintegrationRuntime",
-					"type": "IntegrationRuntimeReference"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/integrationRuntimes/SelfintegrationRuntime')]"
 			]
 		}
 	]

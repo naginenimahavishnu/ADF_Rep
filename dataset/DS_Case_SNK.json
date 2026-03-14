@@ -5,19 +5,6 @@
 			"referenceName": "LS_ADLSPAR_ONPRIM_SNK",
 			"type": "LinkedServiceReference"
 		},
-		"parameters": {
-			"container": {
-				"type": "string",
-				"defaultValue": "switchcase"
-			},
-			"directory": {
-				"type": "string",
-				"defaultValue": "customers"
-			},
-			"file": {
-				"type": "string"
-			}
-		},
 		"annotations": [],
 		"type": "Json",
 		"typeProperties": {

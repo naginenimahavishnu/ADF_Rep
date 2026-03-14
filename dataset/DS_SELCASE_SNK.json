@@ -8,6 +8,14 @@
 		"parameters": {
 			"file": {
 				"type": "string"
+			},
+			"Directory": {
+				"type": "string",
+				"defaultValue": "customer"
+			},
+			"container": {
+				"type": "string",
+				"defaultValue": "switchcasae"
 			}
 		},
 		"annotations": [],

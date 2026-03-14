@@ -105,7 +105,11 @@
 														"type": "DatasetReference",
 														"parameters": {
 															"container": "case",
-															"directory": "files"
+															"directory": "files",
+															"file": {
+																"value": "@item().name",
+																"type": "Expression"
+															}
 														}
 													}
 												],

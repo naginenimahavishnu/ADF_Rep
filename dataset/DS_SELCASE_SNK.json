@@ -5,6 +5,11 @@
 			"referenceName": "LS_ADLSPAR_ONPRIM_SNK",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"file": {
+				"type": "string"
+			}
+		},
 		"annotations": [],
 		"type": "Json",
 		"typeProperties": {

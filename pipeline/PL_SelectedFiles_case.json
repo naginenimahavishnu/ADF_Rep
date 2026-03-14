@@ -102,7 +102,13 @@
 												"inputs": [
 													{
 														"referenceName": "DS_Copy_Srccase_Files",
-														"type": "DatasetReference"
+														"type": "DatasetReference",
+														"parameters": {
+															"file": {
+																"value": "@item().name",
+																"type": "Expression"
+															}
+														}
 													}
 												],
 												"outputs": [

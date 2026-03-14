@@ -114,7 +114,13 @@
 												"outputs": [
 													{
 														"referenceName": "DS_SELCASE_SNK",
-														"type": "DatasetReference"
+														"type": "DatasetReference",
+														"parameters": {
+															"file": {
+																"value": "@item().name",
+																"type": "Expression"
+															}
+														}
 													}
 												]
 											}

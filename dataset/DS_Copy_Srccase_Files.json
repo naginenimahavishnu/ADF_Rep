@@ -24,8 +24,14 @@
 			"location": {
 				"type": "AzureBlobStorageLocation",
 				"fileName": "file",
-				"folderPath": "files",
-				"container": "case"
+				"folderPath": {
+					"value": "@dataset().directory",
+					"type": "Expression"
+				},
+				"container": {
+					"value": "@dataset().container",
+					"type": "Expression"
+				}
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",

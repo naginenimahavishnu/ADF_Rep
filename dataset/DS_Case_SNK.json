@@ -5,13 +5,34 @@
 			"referenceName": "LS_ADLSPAR_ONPRIM_SNK",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"cont": {
+				"type": "string"
+			},
+			"dir": {
+				"type": "string"
+			},
+			"file": {
+				"type": "string"
+			}
+		},
 		"annotations": [],
 		"type": "Json",
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"folderPath": "customer",
-				"fileSystem": "switchcasae"
+				"fileName": {
+					"value": "@dataset().file",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@dataset().dir",
+					"type": "Expression"
+				},
+				"fileSystem": {
+					"value": "@dataset().cont",
+					"type": "Expression"
+				}
 			}
 		},
 		"schema": {}

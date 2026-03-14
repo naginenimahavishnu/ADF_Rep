@@ -33,7 +33,7 @@
 				}
 			},
 			{
-				"name": "Iteration_Files",
+				"name": "For",
 				"type": "ForEach",
 				"dependsOn": [
 					{
@@ -51,7 +51,7 @@
 					},
 					"activities": [
 						{
-							"name": "Storing_Diff_Files",
+							"name": "Switch1",
 							"type": "Switch",
 							"dependsOn": [],
 							"userProperties": [],
@@ -62,10 +62,10 @@
 								},
 								"cases": [
 									{
-										"value": "customers.csv",
+										"value": "customers",
 										"activities": [
 											{
-												"name": "Copy_Customers",
+												"name": "CP_customers",
 												"type": "Copy",
 												"dependsOn": [],
 												"policy": {

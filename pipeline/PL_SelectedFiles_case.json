@@ -104,6 +104,8 @@
 														"referenceName": "DS_Case_Src",
 														"type": "DatasetReference",
 														"parameters": {
+															"container": "case",
+															"directory": "files",
 															"file": {
 																"value": "@item().name",
 																"type": "Expression"

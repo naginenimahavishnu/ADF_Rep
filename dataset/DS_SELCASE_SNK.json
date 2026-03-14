@@ -1,0 +1,29 @@
+{
+	"name": "DS_SELCASE_SNK",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_ADLSPAR_ONPRIM_SNK",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"container": {
+				"type": "string",
+				"defaultValue": "cust"
+			},
+			"directory": {
+				"type": "string"
+			},
+			"file": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation"
+			}
+		},
+		"schema": {}
+	}
+}

@@ -88,6 +88,15 @@
 															"type": "DelimitedTextReadSettings"
 														}
 													},
+													"sink": {
+														"type": "JsonSink",
+														"storeSettings": {
+															"type": "AzureBlobFSWriteSettings"
+														},
+														"formatSettings": {
+															"type": "JsonWriteSettings"
+														}
+													},
 													"enableStaging": false
 												},
 												"inputs": [
@@ -96,8 +105,18 @@
 														"type": "DatasetReference",
 														"parameters": {
 															"container": "case",
-															"directory": "files"
+															"directory": "files",
+															"file": {
+																"value": "@item().name",
+																"type": "Expression"
+															}
 														}
+													}
+												],
+												"outputs": [
+													{
+														"referenceName": "DS_SELCASE_SNK",
+														"type": "DatasetReference"
 													}
 												]
 											}

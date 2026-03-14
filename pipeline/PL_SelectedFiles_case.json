@@ -102,7 +102,13 @@
 												"inputs": [
 													{
 														"referenceName": "DS_Case_Src",
-														"type": "DatasetReference"
+														"type": "DatasetReference",
+														"parameters": {
+															"file": {
+																"value": "@item().name",
+																"type": "Expression"
+															}
+														}
 													}
 												],
 												"outputs": [
@@ -113,6 +119,12 @@
 												]
 											}
 										]
+									},
+									{
+										"value": "drivers.csv"
+									},
+									{
+										"value": "trips.csv"
 									}
 								]
 							}

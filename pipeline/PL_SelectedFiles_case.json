@@ -121,7 +121,9 @@
 															"file": {
 																"value": "@item().name",
 																"type": "Expression"
-															}
+															},
+															"Directory": "customer",
+															"container": "switchcasae"
 														}
 													}
 												]

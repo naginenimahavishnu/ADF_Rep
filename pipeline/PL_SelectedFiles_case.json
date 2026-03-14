@@ -108,15 +108,7 @@
 												"outputs": [
 													{
 														"referenceName": "DS_SELCASE_SNK",
-														"type": "DatasetReference",
-														"parameters": {
-															"container": "switchcasae",
-															"directory": "customer",
-															"file": {
-																"value": "@item().name",
-																"type": "Expression"
-															}
-														}
+														"type": "DatasetReference"
 													}
 												]
 											}

@@ -61,7 +61,7 @@
 						{
 							"type": "Query",
 							"text": {
-								"value": "select count(*) as Total from @{pipeline().parameters.schema}.@{pipeline().parameters.table} where order_id > '@{activity('Load_cdc').output.value[0].Id}'",
+								"value": "select count(*) as Total from @{pipeline().parameters.schema}.@{pipeline().parameters.table} where order_id > '@{if(empty(pipeline().parameters.Id),activity('Load_cdc').output.value[0].Id,pipeline().parameters.Id)}'",
 								"type": "Expression"
 							}
 						}
@@ -103,7 +103,7 @@
 								"source": {
 									"type": "SqlServerSource",
 									"sqlReaderQuery": {
-										"value": "select * from @{pipeline().parameters.schema}.@{pipeline().parameters.table} where order_id > '@{activity('Load_cdc').output.value[0].Id}'",
+										"value": "select * from @{pipeline().parameters.schema}.@{pipeline().parameters.table} where order_id > '@{if(empty(pipeline().parameters.Id),activity('Load_cdc').output.value[0].Id, pipeline().parameters.Id)}'",
 										"type": "Expression"
 									},
 									"queryTimeout": "02:00:00",

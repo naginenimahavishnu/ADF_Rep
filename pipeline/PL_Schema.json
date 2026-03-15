@@ -19,7 +19,9 @@
 						"referenceName": "DS_Case_Metadata",
 						"type": "DatasetReference"
 					},
-					"fieldList": [],
+					"fieldList": [
+						"childItems"
+					],
 					"storeSettings": {
 						"type": "AzureBlobStorageReadSettings",
 						"enablePartitionDiscovery": false
@@ -30,14 +32,97 @@
 				}
 			},
 			{
-				"name": "ForEach1",
+				"name": "ForEach",
 				"type": "ForEach",
-				"dependsOn": [],
-				"userProperties": []
+				"dependsOn": [
+					{
+						"activity": "Get Metadata",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Get Metadata').output.childItems",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "Copy data1",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "DelimitedTextSource",
+									"storeSettings": {
+										"type": "AzureBlobStorageReadSettings",
+										"recursive": true,
+										"enablePartitionDiscovery": false
+									},
+									"formatSettings": {
+										"type": "DelimitedTextReadSettings"
+									}
+								},
+								"sink": {
+									"type": "JsonSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									},
+									"formatSettings": {
+										"type": "JsonWriteSettings"
+									}
+								},
+								"enableStaging": false,
+								"translator": {
+									"value": "@if(equals(item().name,'customers.csv' ),pipeline().parameters.customer_schema,\nif(equals(item().name,'drivers.csv'),pipeline().parameters.drivers.schema,\npipeline().parameters.trips.schema))",
+									"type": "Expression"
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "DS_Case_Src",
+									"type": "DatasetReference",
+									"parameters": {
+										"cont": "case",
+										"dir": "files",
+										"file": {
+											"value": "@item().name",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "DS_Case_SNK",
+									"type": "DatasetReference",
+									"parameters": {
+										"cont": "switchcase",
+										"dir": "schema",
+										"file": {
+											"value": "@item().name",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					]
+				}
 			}
 		],
 		"parameters": {
-			"customer_scema": {
+			"customer_schema": {
 				"type": "object",
 				"defaultValue": {
 					"type": "TabularTranslator",
@@ -117,7 +202,7 @@
 					]
 				}
 			},
-			"driver_scema": {
+			"driver_schema": {
 				"type": "object",
 				"defaultValue": {
 					"type": "TabularTranslator",
@@ -198,7 +283,7 @@
 				}
 			},
 			"trip_schema": {
-				"type": "string",
+				"type": "object",
 				"defaultValue": {
 					"type": "TabularTranslator",
 					"mappings": [

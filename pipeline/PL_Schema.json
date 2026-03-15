@@ -1,0 +1,328 @@
+{
+	"name": "PL_Schema",
+	"properties": {
+		"activities": [
+			{
+				"name": "Get Metadata",
+				"type": "GetMetadata",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "DS_Case_Metadata",
+						"type": "DatasetReference"
+					},
+					"fieldList": [],
+					"storeSettings": {
+						"type": "AzureBlobStorageReadSettings",
+						"enablePartitionDiscovery": false
+					},
+					"formatSettings": {
+						"type": "DelimitedTextReadSettings"
+					}
+				}
+			},
+			{
+				"name": "ForEach1",
+				"type": "ForEach",
+				"dependsOn": [],
+				"userProperties": []
+			}
+		],
+		"parameters": {
+			"customer_scema": {
+				"type": "object",
+				"defaultValue": {
+					"type": "TabularTranslator",
+					"mappings": [
+						{
+							"source": {
+								"name": "customer_id",
+								"type": "String"
+							},
+							"sink": {
+								"path": "$['customer_id']"
+							}
+						},
+						{
+							"source": {
+								"name": "first_name",
+								"type": "String"
+							},
+							"sink": {
+								"path": "$['first_name']"
+							}
+						},
+						{
+							"source": {
+								"name": "last_name",
+								"type": "String"
+							},
+							"sink": {
+								"path": "$['last_name']"
+							}
+						},
+						{
+							"source": {
+								"name": "email",
+								"type": "String"
+							},
+							"sink": {
+								"path": "$['email']"
+							}
+						},
+						{
+							"source": {
+								"name": "phone_number",
+								"type": "String"
+							},
+							"sink": {
+								"path": "$['phone_number']"
+							}
+						},
+						{
+							"source": {
+								"name": "city",
+								"type": "String"
+							},
+							"sink": {
+								"path": "$['city']"
+							}
+						},
+						{
+							"source": {
+								"name": "signup_date",
+								"type": "String"
+							},
+							"sink": {
+								"path": "$['signup_date']"
+							}
+						},
+						{
+							"source": {
+								"name": "last_updated_timestamp",
+								"type": "String"
+							},
+							"sink": {
+								"path": "$['last_updated_timestamp']"
+							}
+						}
+					]
+				}
+			},
+			"driver_scema": {
+				"type": "object",
+				"defaultValue": {
+					"type": "TabularTranslator",
+					"mappings": [
+						{
+							"source": {
+								"name": "driver_id",
+								"type": "String"
+							},
+							"sink": {
+								"path": "$['driver_id']"
+							}
+						},
+						{
+							"source": {
+								"name": "first_name",
+								"type": "String"
+							},
+							"sink": {
+								"path": "$['first_name']"
+							}
+						},
+						{
+							"source": {
+								"name": "last_name",
+								"type": "String"
+							},
+							"sink": {
+								"path": "$['last_name']"
+							}
+						},
+						{
+							"source": {
+								"name": "phone_number",
+								"type": "String"
+							},
+							"sink": {
+								"path": "$['phone_number']"
+							}
+						},
+						{
+							"source": {
+								"name": "vehicle_id",
+								"type": "String"
+							},
+							"sink": {
+								"path": "$['vehicle_id']"
+							}
+						},
+						{
+							"source": {
+								"name": "driver_rating",
+								"type": "String"
+							},
+							"sink": {
+								"path": "$['driver_rating']"
+							}
+						},
+						{
+							"source": {
+								"name": "city",
+								"type": "String"
+							},
+							"sink": {
+								"path": "$['city']"
+							}
+						},
+						{
+							"source": {
+								"name": "last_updated_timestamp",
+								"type": "String"
+							},
+							"sink": {
+								"path": "$['last_updated_timestamp']"
+							}
+						}
+					]
+				}
+			},
+			"trip_schema": {
+				"type": "string",
+				"defaultValue": {
+					"type": "TabularTranslator",
+					"mappings": [
+						{
+							"source": {
+								"name": "trip_id",
+								"type": "String"
+							},
+							"sink": {
+								"path": "$['trip_id']"
+							}
+						},
+						{
+							"source": {
+								"name": "driver_id",
+								"type": "String"
+							},
+							"sink": {
+								"path": "$['driver_id']"
+							}
+						},
+						{
+							"source": {
+								"name": "customer_id",
+								"type": "String"
+							},
+							"sink": {
+								"path": "$['customer_id']"
+							}
+						},
+						{
+							"source": {
+								"name": "vehicle_id",
+								"type": "String"
+							},
+							"sink": {
+								"path": "$['vehicle_id']"
+							}
+						},
+						{
+							"source": {
+								"name": "trip_start_time",
+								"type": "String"
+							},
+							"sink": {
+								"path": "$['trip_start_time']"
+							}
+						},
+						{
+							"source": {
+								"name": "trip_end_time",
+								"type": "String"
+							},
+							"sink": {
+								"path": "$['trip_end_time']"
+							}
+						},
+						{
+							"source": {
+								"name": "start_location",
+								"type": "String"
+							},
+							"sink": {
+								"path": "$['start_location']"
+							}
+						},
+						{
+							"source": {
+								"name": "end_location",
+								"type": "String"
+							},
+							"sink": {
+								"path": "$['end_location']"
+							}
+						},
+						{
+							"source": {
+								"name": "distance_km",
+								"type": "String"
+							},
+							"sink": {
+								"path": "$['distance_km']"
+							}
+						},
+						{
+							"source": {
+								"name": "fare_amount",
+								"type": "String"
+							},
+							"sink": {
+								"path": "$['fare_amount']"
+							}
+						},
+						{
+							"source": {
+								"name": "payment_method",
+								"type": "String"
+							},
+							"sink": {
+								"path": "$['payment_method']"
+							}
+						},
+						{
+							"source": {
+								"name": "trip_status",
+								"type": "String"
+							},
+							"sink": {
+								"path": "$['trip_status']"
+							}
+						},
+						{
+							"source": {
+								"name": "last_updated_timestamp",
+								"type": "String"
+							},
+							"sink": {
+								"path": "$['last_updated_timestamp']"
+							}
+						}
+					]
+				}
+			}
+		},
+		"annotations": []
+	}
+}

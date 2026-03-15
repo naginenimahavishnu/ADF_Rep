@@ -138,11 +138,11 @@
 						},
 						{
 							"source": {
-								"name": "first_naaame",
+								"name": "first_name",
 								"type": "String"
 							},
 							"sink": {
-								"path": "$['first_name']"
+								"path": "$['first_naaaame']"
 							}
 						},
 						{

@@ -1,0 +1,25 @@
+{
+	"name": "PL_Get_From_Rest",
+	"properties": {
+		"activities": [
+			{
+				"name": "Get_from_Poke_API",
+				"type": "WebActivity",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"method": "GET",
+					"url": "https://pokeapi.co/api/v2/pokemon"
+				}
+			}
+		],
+		"annotations": []
+	}
+}

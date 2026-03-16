@@ -1,0 +1,24 @@
+{
+	"name": "PL_Main",
+	"properties": {
+		"activities": [
+			{
+				"name": "Case_Execute",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "PL_SelectedFiles_case",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"annotations": []
+	}
+}

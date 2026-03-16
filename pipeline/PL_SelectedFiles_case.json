@@ -131,7 +131,7 @@
 										]
 									},
 									{
-										"value": "drivers",
+										"value": "drivers.cxc",
 										"activities": [
 											{
 												"name": "CP_drivers",

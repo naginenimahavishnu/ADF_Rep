@@ -50,6 +50,9 @@
 		"keyvaultdata_properties_typeProperties_baseUrl": {
 			"value": "https://keyvaultdata.vault.azure.net/"
 		},
+		"LS_Rest_Poke_properties_typeProperties_url": {
+			"value": "https://pokeapi.co/api/v2/pokemon"
+		},
 		"containerUri": {
 			"value": ""
 		},

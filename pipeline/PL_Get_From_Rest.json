@@ -45,7 +45,10 @@
 						"requestInterval": "00.00:00:00.010",
 						"requestMethod": "GET",
 						"paginationRules": {
-							"AbsoluteUrl": "$.next"
+							"QueryParameters.offset": {
+								"value": "RANGE:0:@{activity('Get_from_Poke_API').output.count}:20\r\n\r\n",
+								"type": "Expression"
+							}
 						}
 					},
 					"sink": {

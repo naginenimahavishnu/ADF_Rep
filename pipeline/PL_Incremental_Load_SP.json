@@ -69,7 +69,17 @@
 								},
 								"dataset": {
 									"referenceName": "DS_lookup_maxval",
-									"type": "DatasetReference"
+									"type": "DatasetReference",
+									"parameters": {
+										"tablename": {
+											"value": "@pipeline().parameters.table",
+											"type": "Expression"
+										},
+										"schemaname": {
+											"value": "@pipeline().parameters.schema",
+											"type": "Expression"
+										}
+									}
 								}
 							}
 						}

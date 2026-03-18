@@ -1,0 +1,20 @@
+{
+	"name": "child_Incremental",
+	"properties": {
+		"parameters": {
+			"schmema": {
+				"type": "string"
+			},
+			"table": {
+				"type": "string"
+			},
+			"watermark": {
+				"type": "string"
+			},
+			"lastupdate": {
+				"type": "string"
+			}
+		},
+		"annotations": []
+	}
+}

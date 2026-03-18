@@ -50,42 +50,15 @@
 					},
 					"activities": [
 						{
-							"name": "Lookup_loadtable",
-							"type": "Lookup",
+							"name": "Execute_childpipeline",
+							"type": "ExecutePipeline",
 							"dependsOn": [],
 							"policy": {
-								"timeout": "0.12:00:00",
-								"retry": 0,
-								"retryIntervalInSeconds": 30,
-								"secureOutput": false,
 								"secureInput": false
 							},
 							"userProperties": [],
 							"typeProperties": {
-								"source": {
-									"type": "SqlServerSource",
-									"sqlReaderQuery": {
-										"value": "SELECT MAX(@{pipeline().parameters.watermark}) AS MaxValue\nFROM @{pipeline().parameters.schema}.@{pipeline().parameters.table}\n",
-										"type": "Expression"
-									},
-									"queryTimeout": "02:00:00",
-									"partitionOption": "None"
-								},
-								"dataset": {
-									"referenceName": "DS_lookup_maxval",
-									"type": "DatasetReference",
-									"parameters": {
-										"tablename": {
-											"value": "@pipeline().parameters.table",
-											"type": "Expression"
-										},
-										"schemaname": {
-											"value": "@pipeline().parameters.schema",
-											"type": "Expression"
-										}
-									}
-								},
-								"firstRowOnly": false
+								"waitOnCompletion": true
 							}
 						}
 					]

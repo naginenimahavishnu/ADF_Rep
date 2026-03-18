@@ -58,7 +58,29 @@
 							},
 							"userProperties": [],
 							"typeProperties": {
-								"waitOnCompletion": true
+								"pipeline": {
+									"referenceName": "child_Incremental",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"schmema": {
+										"value": "@item().schemaname",
+										"type": "Expression"
+									},
+									"table": {
+										"value": "@item().tablename",
+										"type": "Expression"
+									},
+									"watermark": {
+										"value": "@item().watermark",
+										"type": "Expression"
+									},
+									"lastupdate": {
+										"value": "@item().lastval",
+										"type": "Expression"
+									}
+								}
 							}
 						}
 					]

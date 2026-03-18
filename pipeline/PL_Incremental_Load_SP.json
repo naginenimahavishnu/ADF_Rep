@@ -64,6 +64,10 @@
 							"typeProperties": {
 								"source": {
 									"type": "SqlServerSource",
+									"sqlReaderQuery": {
+										"value": "select max(@{pipeline().parameters.lastval}) as max from (@{pipeline().parameters.schema}).(@{pipeline().parameters.table})",
+										"type": "Expression"
+									},
 									"queryTimeout": "02:00:00",
 									"partitionOption": "None"
 								},

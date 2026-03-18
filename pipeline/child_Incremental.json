@@ -18,7 +18,7 @@
 					"source": {
 						"type": "SqlServerSource",
 						"sqlReaderQuery": {
-							"value": "select max(@{pipeline().parameters.watermark}) from (@{pipeline().parameters.schmema}).(@{pipeline().parameters.table})",
+							"value": "select max(@{pipeline().parameters.watermark}) as max from (@{pipeline().parameters.schmema}).(@{pipeline().parameters.table})",
 							"type": "Expression"
 						},
 						"queryTimeout": "02:00:00",

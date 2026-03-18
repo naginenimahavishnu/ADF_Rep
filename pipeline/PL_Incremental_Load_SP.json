@@ -89,16 +89,20 @@
 		],
 		"parameters": {
 			"schema": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "dbo"
 			},
 			"table": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "par"
 			},
 			"watermark": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "''"
 			},
 			"lastval": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "''"
 			}
 		},
 		"annotations": []

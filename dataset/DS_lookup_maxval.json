@@ -11,6 +11,9 @@
 			},
 			"schemaname": {
 				"type": "string"
+			},
+			"watermark": {
+				"type": "string"
 			}
 		},
 		"annotations": [],

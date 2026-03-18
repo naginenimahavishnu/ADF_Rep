@@ -1,0 +1,20 @@
+{
+	"name": "DS_lookup_maxval",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_ONPRIMSQL_SRC",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"tablename": {
+				"type": "string"
+			},
+			"schemaname": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": []
+	}
+}

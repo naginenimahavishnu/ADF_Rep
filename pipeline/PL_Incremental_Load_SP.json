@@ -65,7 +65,7 @@
 								"source": {
 									"type": "SqlServerSource",
 									"sqlReaderQuery": {
-										"value": "select max(@{pipeline().parameters.lastval}) as max from (@{pipeline().parameters.schema}).(@{pipeline().parameters.table})",
+										"value": "SELECT MAX(@{pipeline().parameters.watermark}) AS MaxValue\nFROM @{pipeline().parameters.schema}.@{pipeline().parameters.table}\n",
 										"type": "Expression"
 									},
 									"queryTimeout": "02:00:00",
@@ -93,20 +93,16 @@
 		],
 		"parameters": {
 			"schema": {
-				"type": "string",
-				"defaultValue": "dbo"
+				"type": "string"
 			},
 			"table": {
-				"type": "string",
-				"defaultValue": "par"
+				"type": "string"
 			},
 			"watermark": {
-				"type": "string",
-				"defaultValue": "''"
+				"type": "string"
 			},
 			"lastval": {
-				"type": "string",
-				"defaultValue": "''"
+				"type": "string"
 			}
 		},
 		"annotations": []

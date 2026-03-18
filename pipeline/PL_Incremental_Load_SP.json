@@ -50,12 +50,27 @@
 					},
 					"activities": [
 						{
-							"name": "Wait",
-							"type": "Wait",
+							"name": "Lookup_loadtable",
+							"type": "Lookup",
 							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
 							"userProperties": [],
 							"typeProperties": {
-								"waitTimeInSeconds": 1
+								"source": {
+									"type": "SqlServerSource",
+									"queryTimeout": "02:00:00",
+									"partitionOption": "None"
+								},
+								"dataset": {
+									"referenceName": "DS_lookup_maxval",
+									"type": "DatasetReference"
+								}
 							}
 						}
 					]

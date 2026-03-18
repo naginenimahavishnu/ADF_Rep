@@ -1,6 +1,46 @@
 {
 	"name": "child_Incremental",
 	"properties": {
+		"activities": [
+			{
+				"name": "Lookup_child",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": {
+							"value": "select max(@{pipeline().parameters.watermark}) from (@{pipeline().parameters.schmema}).(@{pipeline().parameters.table})",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "DS_lookup_maxval",
+						"type": "DatasetReference",
+						"parameters": {
+							"tablename": {
+								"value": "@pipeline().parameters.table",
+								"type": "Expression"
+							},
+							"schemaname": {
+								"value": "@pipeline().parameters.schmema",
+								"type": "Expression"
+							}
+						}
+					}
+				}
+			}
+		],
 		"parameters": {
 			"schmema": {
 				"type": "string"

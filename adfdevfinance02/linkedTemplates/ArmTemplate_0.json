@@ -47,13 +47,13 @@
 			"type": "string",
 			"defaultValue": "https://devfinancegen.dfs.core.windows.net"
 		},
-		"keyvaultdata_properties_typeProperties_baseUrl": {
-			"type": "string",
-			"defaultValue": "https://keyvaultdata.vault.azure.net/"
-		},
 		"LS_Rest_Poke_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://pokeapi.co/api/v2/pokemon"
+		},
+		"keyvaultdata_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://keyvaultdata.vault.azure.net/"
 		}
 	},
 	"variables": {
@@ -151,6 +151,21 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/LS_Rest_Poke')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "RestService",
+				"typeProperties": {
+					"url": "[parameters('LS_Rest_Poke_properties_typeProperties_url')]",
+					"enableServerCertificateValidation": true,
+					"authenticationType": "Anonymous"
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/LS_VALIDATION')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -183,21 +198,6 @@
 			"properties": {
 				"type": "SelfHosted",
 				"typeProperties": {}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/LS_Rest_Poke')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "RestService",
-				"typeProperties": {
-					"url": "[parameters('LS_Rest_Poke_properties_typeProperties_url')]",
-					"enableServerCertificateValidation": true,
-					"authenticationType": "Anonymous"
-				}
 			},
 			"dependsOn": []
 		},
@@ -616,12 +616,25 @@
 					"referenceName": "LS_PAR_SNK",
 					"type": "LinkedServiceReference"
 				},
+				"parameters": {
+					"Table_Name": {
+						"type": "string"
+					}
+				},
 				"annotations": [],
 				"type": "Parquet",
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"fileSystem": "new"
+						"fileName": {
+							"value": "@concat(dataset().Table_Name,'UPDATE')",
+							"type": "Expression"
+						},
+						"folderPath": {
+							"value": "@concat(dataset().Table_Name,'/',formatDateTime(utcnow(),'yyy/MM/dd'))\n\n",
+							"type": "Expression"
+						},
+						"fileSystem": "retaildata"
 					},
 					"compressionCodec": "snappy"
 				},

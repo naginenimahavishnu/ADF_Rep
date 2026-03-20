@@ -29,6 +29,43 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/DS_REST_SNK_JSON')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_Getmetadata_CSV",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileSystem": "poke"
+					}
+				},
+				"schema": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_Rest_Poke')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_Rest_Poke",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/DS_SELECT_SINK')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -233,41 +270,97 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/DS_Rest_Poke')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
+			"name": "[concat(parameters('factoryName'), '/PL_Get_From_Rest')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"linkedServiceName": {
-					"referenceName": "LS_Rest_Poke",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "RestResource",
-				"typeProperties": {},
-				"schema": []
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/DS_REST_SNK_JSON')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "LS_Getmetadata_CSV",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "Json",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"fileSystem": "poke"
+				"activities": [
+					{
+						"name": "Get_from_Poke_API",
+						"type": "WebActivity",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"method": "GET",
+							"headers": {},
+							"url": "https://pokeapi.co/api/v2/pokemon"
+						}
+					},
+					{
+						"name": "Get_all_Records",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "Get_from_Poke_API",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "RestSource",
+								"httpRequestTimeout": "00:01:40",
+								"requestInterval": "00.00:00:00.010",
+								"requestMethod": "GET",
+								"paginationRules": {
+									"QueryParameters.offset": {
+										"value": "RANGE:0:@{activity('Get_from_Poke_API').output.count}:20\n\n",
+										"type": "Expression"
+									}
+								}
+							},
+							"sink": {
+								"type": "JsonSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "JsonWriteSettings"
+								}
+							},
+							"enableStaging": false
+						},
+						"inputs": [
+							{
+								"referenceName": "DS_Rest_Poke",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "DS_REST_SNK_JSON",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
 					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
 				},
-				"schema": {}
+				"annotations": []
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DS_Rest_Poke')]",
+				"[concat(variables('factoryId'), '/datasets/DS_REST_SNK_JSON')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/PL_LOOKUP')]",
@@ -313,6 +406,427 @@
 				},
 				"annotations": [],
 				"lastPublishTime": "2026-03-11T18:46:04Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_Schema')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Get Metadata",
+						"type": "GetMetadata",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataset": {
+								"referenceName": "DS_Case_Metadata",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"fieldList": [
+								"childItems"
+							],
+							"storeSettings": {
+								"type": "AzureBlobStorageReadSettings",
+								"recursive": true,
+								"enablePartitionDiscovery": false
+							},
+							"formatSettings": {
+								"type": "DelimitedTextReadSettings"
+							}
+						}
+					},
+					{
+						"name": "ForEach",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Get Metadata",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Get Metadata').output.childItems",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "Copy data1",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "DelimitedTextSource",
+											"storeSettings": {
+												"type": "AzureBlobStorageReadSettings",
+												"recursive": true,
+												"enablePartitionDiscovery": false
+											},
+											"formatSettings": {
+												"type": "DelimitedTextReadSettings"
+											}
+										},
+										"sink": {
+											"type": "JsonSink",
+											"storeSettings": {
+												"type": "AzureBlobFSWriteSettings"
+											},
+											"formatSettings": {
+												"type": "JsonWriteSettings"
+											}
+										},
+										"enableStaging": false,
+										"translator": {
+											"value": "@if(equals(item().name,'customers.csv'),pipeline().parameters.customers_schema,if(equals(item().name,'drivers.csv'),pipeline().parameters.drivers_schema,pipeline().parameters.trips_schema))",
+											"type": "Expression"
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "DS_Case_Src",
+											"type": "DatasetReference",
+											"parameters": {
+												"cont": "case",
+												"dir": "files",
+												"file": {
+													"value": "@item().name",
+													"type": "Expression"
+												}
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "DS_Case_SNK",
+											"type": "DatasetReference",
+											"parameters": {
+												"cont": "switchcase",
+												"dir": "schema",
+												"file": {
+													"value": "@item().name",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"parameters": {
+					"customers_schema": {
+						"type": "object",
+						"defaultValue": {
+							"type": "TabularTranslator",
+							"mappings": [
+								{
+									"source": {
+										"name": "customer_id",
+										"type": "String"
+									},
+									"sink": {
+										"path": "$['customer_id']"
+									}
+								},
+								{
+									"source": {
+										"name": "first_name",
+										"type": "String"
+									},
+									"sink": {
+										"path": "$['first_naaaame']"
+									}
+								},
+								{
+									"source": {
+										"name": "last_name",
+										"type": "String"
+									},
+									"sink": {
+										"path": "$['last_name']"
+									}
+								},
+								{
+									"source": {
+										"name": "email",
+										"type": "String"
+									},
+									"sink": {
+										"path": "$['email']"
+									}
+								},
+								{
+									"source": {
+										"name": "phone_number",
+										"type": "String"
+									},
+									"sink": {
+										"path": "$['phone_number']"
+									}
+								},
+								{
+									"source": {
+										"name": "city",
+										"type": "String"
+									},
+									"sink": {
+										"path": "$['city']"
+									}
+								},
+								{
+									"source": {
+										"name": "signup_date",
+										"type": "String"
+									},
+									"sink": {
+										"path": "$['signup_date']"
+									}
+								},
+								{
+									"source": {
+										"name": "last_updated_timestamp",
+										"type": "String"
+									},
+									"sink": {
+										"path": "$['last_updated_timestamp']"
+									}
+								}
+							]
+						}
+					},
+					"drivers_schema": {
+						"type": "object",
+						"defaultValue": {
+							"type": "TabularTranslator",
+							"mappings": [
+								{
+									"source": {
+										"name": "driver_id",
+										"type": "String"
+									},
+									"sink": {
+										"path": "$['driver_id']"
+									}
+								},
+								{
+									"source": {
+										"name": "first_name",
+										"type": "String"
+									},
+									"sink": {
+										"path": "$['first_name']"
+									}
+								},
+								{
+									"source": {
+										"name": "last_name",
+										"type": "String"
+									},
+									"sink": {
+										"path": "$['last_name']"
+									}
+								},
+								{
+									"source": {
+										"name": "phone_number",
+										"type": "String"
+									},
+									"sink": {
+										"path": "$['phone_number']"
+									}
+								},
+								{
+									"source": {
+										"name": "vehicle_id",
+										"type": "String"
+									},
+									"sink": {
+										"path": "$['vehicle_id']"
+									}
+								},
+								{
+									"source": {
+										"name": "driver_rating",
+										"type": "String"
+									},
+									"sink": {
+										"path": "$['driver_rating']"
+									}
+								},
+								{
+									"source": {
+										"name": "city",
+										"type": "String"
+									},
+									"sink": {
+										"path": "$['city']"
+									}
+								},
+								{
+									"source": {
+										"name": "last_updated_timestamp",
+										"type": "String"
+									},
+									"sink": {
+										"path": "$['last_updated_timestamp']"
+									}
+								}
+							]
+						}
+					},
+					"trips_schema": {
+						"type": "object",
+						"defaultValue": {
+							"type": "TabularTranslator",
+							"mappings": [
+								{
+									"source": {
+										"name": "trip_id",
+										"type": "String"
+									},
+									"sink": {
+										"path": "$['trip_id']"
+									}
+								},
+								{
+									"source": {
+										"name": "driver_id",
+										"type": "String"
+									},
+									"sink": {
+										"path": "$['driver_id']"
+									}
+								},
+								{
+									"source": {
+										"name": "customer_id",
+										"type": "String"
+									},
+									"sink": {
+										"path": "$['customer_id']"
+									}
+								},
+								{
+									"source": {
+										"name": "vehicle_id",
+										"type": "String"
+									},
+									"sink": {
+										"path": "$['vehicle_id']"
+									}
+								},
+								{
+									"source": {
+										"name": "trip_start_time",
+										"type": "String"
+									},
+									"sink": {
+										"path": "$['trip_start_time']"
+									}
+								},
+								{
+									"source": {
+										"name": "trip_end_time",
+										"type": "String"
+									},
+									"sink": {
+										"path": "$['trip_end_time']"
+									}
+								},
+								{
+									"source": {
+										"name": "start_location",
+										"type": "String"
+									},
+									"sink": {
+										"path": "$['start_location']"
+									}
+								},
+								{
+									"source": {
+										"name": "end_location",
+										"type": "String"
+									},
+									"sink": {
+										"path": "$['end_location']"
+									}
+								},
+								{
+									"source": {
+										"name": "distance_km",
+										"type": "String"
+									},
+									"sink": {
+										"path": "$['distance_km']"
+									}
+								},
+								{
+									"source": {
+										"name": "fare_amount",
+										"type": "String"
+									},
+									"sink": {
+										"path": "$['fare_amount']"
+									}
+								},
+								{
+									"source": {
+										"name": "payment_method",
+										"type": "String"
+									},
+									"sink": {
+										"path": "$['payment_method']"
+									}
+								},
+								{
+									"source": {
+										"name": "trip_status",
+										"type": "String"
+									},
+									"sink": {
+										"path": "$['trip_status']"
+									}
+								},
+								{
+									"source": {
+										"name": "last_updated_timestamp",
+										"type": "String"
+									},
+									"sink": {
+										"path": "$['last_updated_timestamp']"
+									}
+								}
+							]
+						}
+					}
+				},
+				"annotations": []
 			},
 			"dependsOn": []
 		},
@@ -906,14 +1420,49 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/PL_Schema')]",
+			"name": "[concat(parameters('factoryName'), '/DS_lookup_maxval')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_ONPRIMSQL_SRC",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"tablename": {
+						"type": "string"
+					},
+					"schemaname": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": {
+						"value": "@dataset().schemaname",
+						"type": "Expression"
+					},
+					"table": {
+						"value": "@dataset().tablename",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_ONPRIMSQL_SRC')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/child_SP')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"activities": [
 					{
-						"name": "Get Metadata",
-						"type": "GetMetadata",
+						"name": "Stored procedure",
+						"type": "SqlServerStoredProcedure",
 						"dependsOn": [],
 						"policy": {
 							"timeout": "0.12:00:00",
@@ -924,110 +1473,34 @@
 						},
 						"userProperties": [],
 						"typeProperties": {
-							"dataset": {
-								"referenceName": "DS_Case_Metadata",
-								"type": "DatasetReference",
-								"parameters": {}
-							},
-							"fieldList": [
-								"childItems"
-							],
-							"storeSettings": {
-								"type": "AzureBlobStorageReadSettings",
-								"enablePartitionDiscovery": false
-							},
-							"formatSettings": {
-								"type": "DelimitedTextReadSettings"
-							}
-						}
-					},
-					{
-						"name": "ForEach",
-						"type": "ForEach",
-						"dependsOn": [
-							{
-								"activity": "Get Metadata",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"items": {
-								"value": "@activity('Get Metadata').output.childItems",
-								"type": "Expression"
-							},
-							"activities": [
-								{
-									"name": "Copy data1",
-									"type": "Copy",
-									"dependsOn": [],
-									"policy": {
-										"timeout": "0.12:00:00",
-										"retry": 0,
-										"retryIntervalInSeconds": 30,
-										"secureOutput": false,
-										"secureInput": false
+							"storedProcedureName": "[[dbo].[UpdateWatermark]",
+							"storedProcedureParameters": {
+								"TableName": {
+									"value": {
+										"value": "@pipeline().parameters.table",
+										"type": "Expression"
 									},
-									"userProperties": [],
-									"typeProperties": {
-										"source": {
-											"type": "DelimitedTextSource",
-											"storeSettings": {
-												"type": "AzureBlobStorageReadSettings",
-												"recursive": true,
-												"enablePartitionDiscovery": false
-											},
-											"formatSettings": {
-												"type": "DelimitedTextReadSettings"
-											}
-										},
-										"sink": {
-											"type": "JsonSink",
-											"storeSettings": {
-												"type": "AzureBlobFSWriteSettings"
-											},
-											"formatSettings": {
-												"type": "JsonWriteSettings"
-											}
-										},
-										"enableStaging": false,
-										"translator": {
-											"value": "@if(equals(item().name,'customers.csv'),pipeline().parameters.customers_schema,if(equals(item().name,'drivers.csv'),pipeline().parameters.drivers_schema,pipeline().parameters.trips_schema))",
-											"type": "Expression"
-										}
+									"type": "String"
+								},
+								"TableSchema": {
+									"value": {
+										"value": "@pipeline().parameters.schema",
+										"type": "Expression"
 									},
-									"inputs": [
-										{
-											"referenceName": "DS_Case_Src",
-											"type": "DatasetReference",
-											"parameters": {
-												"cont": "case",
-												"dir": "files",
-												"file": {
-													"value": "@item().name",
-													"type": "Expression"
-												}
-											}
-										}
-									],
-									"outputs": [
-										{
-											"referenceName": "DS_Case_SNK",
-											"type": "DatasetReference",
-											"parameters": {
-												"cont": "switchcase",
-												"dir": "schema",
-												"file": {
-													"value": "@item().name",
-													"type": "Expression"
-												}
-											}
-										}
-									]
+									"type": "String"
+								},
+								"WatermarkColumn": {
+									"value": {
+										"value": "@pipeline().parameters.watermark",
+										"type": "Expression"
+									},
+									"type": "String"
 								}
-							]
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "LS_ONPRIMSQL_SRC",
+							"type": "LinkedServiceReference"
 						}
 					}
 				],
@@ -1035,387 +1508,20 @@
 					"elapsedTimeMetric": {}
 				},
 				"parameters": {
-					"customers_schema": {
-						"type": "object",
-						"defaultValue": {
-							"type": "TabularTranslator",
-							"mappings": [
-								{
-									"source": {
-										"name": "customer_id",
-										"type": "String"
-									},
-									"sink": {
-										"path": "$['customer_id']"
-									}
-								},
-								{
-									"source": {
-										"name": "first_name",
-										"type": "String"
-									},
-									"sink": {
-										"path": "$['first_naaaame']"
-									}
-								},
-								{
-									"source": {
-										"name": "last_name",
-										"type": "String"
-									},
-									"sink": {
-										"path": "$['last_name']"
-									}
-								},
-								{
-									"source": {
-										"name": "email",
-										"type": "String"
-									},
-									"sink": {
-										"path": "$['email']"
-									}
-								},
-								{
-									"source": {
-										"name": "phone_number",
-										"type": "String"
-									},
-									"sink": {
-										"path": "$['phone_number']"
-									}
-								},
-								{
-									"source": {
-										"name": "city",
-										"type": "String"
-									},
-									"sink": {
-										"path": "$['city']"
-									}
-								},
-								{
-									"source": {
-										"name": "signup_date",
-										"type": "String"
-									},
-									"sink": {
-										"path": "$['signup_date']"
-									}
-								},
-								{
-									"source": {
-										"name": "last_updated_timestamp",
-										"type": "String"
-									},
-									"sink": {
-										"path": "$['last_updated_timestamp']"
-									}
-								}
-							]
-						}
+					"schema": {
+						"type": "string"
 					},
-					"drivers_schema": {
-						"type": "object",
-						"defaultValue": {
-							"type": "TabularTranslator",
-							"mappings": [
-								{
-									"source": {
-										"name": "driver_id",
-										"type": "String"
-									},
-									"sink": {
-										"path": "$['driver_id']"
-									}
-								},
-								{
-									"source": {
-										"name": "first_name",
-										"type": "String"
-									},
-									"sink": {
-										"path": "$['first_name']"
-									}
-								},
-								{
-									"source": {
-										"name": "last_name",
-										"type": "String"
-									},
-									"sink": {
-										"path": "$['last_name']"
-									}
-								},
-								{
-									"source": {
-										"name": "phone_number",
-										"type": "String"
-									},
-									"sink": {
-										"path": "$['phone_number']"
-									}
-								},
-								{
-									"source": {
-										"name": "vehicle_id",
-										"type": "String"
-									},
-									"sink": {
-										"path": "$['vehicle_id']"
-									}
-								},
-								{
-									"source": {
-										"name": "driver_rating",
-										"type": "String"
-									},
-									"sink": {
-										"path": "$['driver_rating']"
-									}
-								},
-								{
-									"source": {
-										"name": "city",
-										"type": "String"
-									},
-									"sink": {
-										"path": "$['city']"
-									}
-								},
-								{
-									"source": {
-										"name": "last_updated_timestamp",
-										"type": "String"
-									},
-									"sink": {
-										"path": "$['last_updated_timestamp']"
-									}
-								}
-							]
-						}
+					"table": {
+						"type": "string"
 					},
-					"trips_schema": {
-						"type": "object",
-						"defaultValue": {
-							"type": "TabularTranslator",
-							"mappings": [
-								{
-									"source": {
-										"name": "trip_id",
-										"type": "String"
-									},
-									"sink": {
-										"path": "$['trip_id']"
-									}
-								},
-								{
-									"source": {
-										"name": "driver_id",
-										"type": "String"
-									},
-									"sink": {
-										"path": "$['driver_id']"
-									}
-								},
-								{
-									"source": {
-										"name": "customer_id",
-										"type": "String"
-									},
-									"sink": {
-										"path": "$['customer_id']"
-									}
-								},
-								{
-									"source": {
-										"name": "vehicle_id",
-										"type": "String"
-									},
-									"sink": {
-										"path": "$['vehicle_id']"
-									}
-								},
-								{
-									"source": {
-										"name": "trip_start_time",
-										"type": "String"
-									},
-									"sink": {
-										"path": "$['trip_start_time']"
-									}
-								},
-								{
-									"source": {
-										"name": "trip_end_time",
-										"type": "String"
-									},
-									"sink": {
-										"path": "$['trip_end_time']"
-									}
-								},
-								{
-									"source": {
-										"name": "start_location",
-										"type": "String"
-									},
-									"sink": {
-										"path": "$['start_location']"
-									}
-								},
-								{
-									"source": {
-										"name": "end_location",
-										"type": "String"
-									},
-									"sink": {
-										"path": "$['end_location']"
-									}
-								},
-								{
-									"source": {
-										"name": "distance_km",
-										"type": "String"
-									},
-									"sink": {
-										"path": "$['distance_km']"
-									}
-								},
-								{
-									"source": {
-										"name": "fare_amount",
-										"type": "String"
-									},
-									"sink": {
-										"path": "$['fare_amount']"
-									}
-								},
-								{
-									"source": {
-										"name": "payment_method",
-										"type": "String"
-									},
-									"sink": {
-										"path": "$['payment_method']"
-									}
-								},
-								{
-									"source": {
-										"name": "trip_status",
-										"type": "String"
-									},
-									"sink": {
-										"path": "$['trip_status']"
-									}
-								},
-								{
-									"source": {
-										"name": "last_updated_timestamp",
-										"type": "String"
-									},
-									"sink": {
-										"path": "$['last_updated_timestamp']"
-									}
-								}
-							]
-						}
+					"watermark": {
+						"type": "string"
 					}
-				},
-				"annotations": []
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/PL_Get_From_Rest')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Get_from_Poke_API",
-						"type": "WebActivity",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"method": "GET",
-							"headers": {},
-							"url": "https://pokeapi.co/api/v2/pokemon"
-						}
-					},
-					{
-						"name": "Get_all_Records",
-						"type": "Copy",
-						"dependsOn": [
-							{
-								"activity": "Get_from_Poke_API",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "RestSource",
-								"httpRequestTimeout": "00:01:40",
-								"requestInterval": "00.00:00:00.010",
-								"requestMethod": "GET",
-								"paginationRules": {
-									"QueryParameters.offset": {
-										"value": "RANGE:0:@{activity('Get_from_Poke_API').output.count}:20\n\n",
-										"type": "Expression"
-									}
-								}
-							},
-							"sink": {
-								"type": "JsonSink",
-								"storeSettings": {
-									"type": "AzureBlobFSWriteSettings"
-								},
-								"formatSettings": {
-									"type": "JsonWriteSettings"
-								}
-							},
-							"enableStaging": false
-						},
-						"inputs": [
-							{
-								"referenceName": "DS_Rest_Poke",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "DS_REST_SNK_JSON",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
 				},
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/DS_Rest_Poke')]",
-				"[concat(variables('factoryId'), '/datasets/DS_REST_SNK_JSON')]"
+				"[concat(variables('factoryId'), '/linkedServices/LS_ONPRIMSQL_SRC')]"
 			]
 		},
 		{

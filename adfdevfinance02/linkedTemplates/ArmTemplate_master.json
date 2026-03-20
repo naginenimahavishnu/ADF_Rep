@@ -63,13 +63,13 @@
 			"type": "string",
 			"defaultValue": "https://devfinancegen.dfs.core.windows.net"
 		},
-		"keyvaultdata_properties_typeProperties_baseUrl": {
-			"type": "string",
-			"defaultValue": "https://keyvaultdata.vault.azure.net/"
-		},
 		"LS_Rest_Poke_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://pokeapi.co/api/v2/pokemon"
+		},
+		"keyvaultdata_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://keyvaultdata.vault.azure.net/"
 		},
 		"containerUri": {
 			"type": "string",
@@ -128,11 +128,11 @@
 					"LS_PAR_SNK_properties_typeProperties_url": {
 						"value": "[parameters('LS_PAR_SNK_properties_typeProperties_url')]"
 					},
-					"keyvaultdata_properties_typeProperties_baseUrl": {
-						"value": "[parameters('keyvaultdata_properties_typeProperties_baseUrl')]"
-					},
 					"LS_Rest_Poke_properties_typeProperties_url": {
 						"value": "[parameters('LS_Rest_Poke_properties_typeProperties_url')]"
+					},
+					"keyvaultdata_properties_typeProperties_baseUrl": {
+						"value": "[parameters('keyvaultdata_properties_typeProperties_baseUrl')]"
 					}
 				}
 			},
@@ -168,6 +168,26 @@
 			},
 			"dependsOn": [
 				"[resourceId('Microsoft.Resources/deployments', 'adfdevfinance02_ArmTemplate_0')]"
+			]
+		},
+		{
+			"name": "adfdevfinance02_ArmTemplate_2",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_2.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'adfdevfinance02_ArmTemplate_1')]"
 			]
 		}
 	]

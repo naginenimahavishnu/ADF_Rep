@@ -54,18 +54,46 @@
 				"userProperties": [],
 				"typeProperties": {
 					"expression": {
-						"value": "@or(equals(pipeline().parameters.lastupdate,'null' ),greater(int(activity('Lookup_child').output.firstRow.max),int(pipeline().parameters.lastupdate)))",
+						"value": "@or(equals(pipeline().parameters.lastupdate,'null' ),greater(int(activity('Lookup_child').output.firstRow.max),int(pipeline().parameters.lastupdate)))\n\n\n\n",
 						"type": "Expression"
 					},
 					"ifTrueActivities": [
 						{
-							"name": "Wait1",
-							"type": "Wait",
+							"name": "Copy data",
+							"type": "Copy",
 							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
 							"userProperties": [],
 							"typeProperties": {
-								"waitTimeInSeconds": 1
-							}
+								"source": {
+									"type": "SqlServerSource",
+									"queryTimeout": "02:00:00",
+									"partitionOption": "None"
+								},
+								"enableStaging": false
+							},
+							"inputs": [
+								{
+									"referenceName": "DS_lookup_maxval",
+									"type": "DatasetReference",
+									"parameters": {
+										"tablename": {
+											"value": "@pipeline().parameters.table",
+											"type": "Expression"
+										},
+										"schemaname": {
+											"value": "@pipeline().parameters.schmema",
+											"type": "Expression"
+										}
+									}
+								}
+							]
 						}
 					]
 				}

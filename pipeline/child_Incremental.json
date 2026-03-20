@@ -144,7 +144,25 @@
 							},
 							"userProperties": [],
 							"typeProperties": {
-								"waitOnCompletion": true
+								"pipeline": {
+									"referenceName": "child_SP",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"schema": {
+										"value": "@pipeline().parameters.schmema",
+										"type": "Expression"
+									},
+									"table": {
+										"value": "@pipeline().parameters.table",
+										"type": "Expression"
+									},
+									"watermark": {
+										"value": "@pipeline().parameters.watermark",
+										"type": "Expression"
+									}
+								}
 							}
 						}
 					]

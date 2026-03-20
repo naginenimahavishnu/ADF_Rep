@@ -1,6 +1,17 @@
 {
 	"name": "child_SP",
 	"properties": {
+		"parameters": {
+			"schema": {
+				"type": "string"
+			},
+			"table": {
+				"type": "string"
+			},
+			"watermark": {
+				"type": "string"
+			}
+		},
 		"annotations": []
 	}
 }

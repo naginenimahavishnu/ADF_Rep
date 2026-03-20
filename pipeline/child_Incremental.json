@@ -127,6 +127,25 @@
 									}
 								}
 							]
+						},
+						{
+							"name": "Execute Pipeline_SP",
+							"type": "ExecutePipeline",
+							"dependsOn": [
+								{
+									"activity": "Copy data",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"waitOnCompletion": true
+							}
 						}
 					]
 				}

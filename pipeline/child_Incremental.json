@@ -118,7 +118,13 @@
 							"outputs": [
 								{
 									"referenceName": "DS_PAR_SNK",
-									"type": "DatasetReference"
+									"type": "DatasetReference",
+									"parameters": {
+										"Table_Name": {
+											"value": "@pipeline().parameters.table",
+											"type": "Expression"
+										}
+									}
 								}
 							]
 						}

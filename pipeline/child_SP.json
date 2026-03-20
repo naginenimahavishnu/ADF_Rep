@@ -19,14 +19,14 @@
 					"storedProcedureParameters": {
 						"TableName": {
 							"value": {
-								"value": "@pipeline().parameters.schema",
+								"value": "@pipeline().parameters.table",
 								"type": "Expression"
 							},
 							"type": "String"
 						},
 						"TableSchema": {
 							"value": {
-								"value": "@pipeline().parameters.table",
+								"value": "@pipeline().parameters.schema",
 								"type": "Expression"
 							},
 							"type": "String"

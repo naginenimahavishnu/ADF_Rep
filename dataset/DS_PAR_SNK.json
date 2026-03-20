@@ -5,12 +5,25 @@
 			"referenceName": "LS_PAR_SNK",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"Table_Name": {
+				"type": "string"
+			}
+		},
 		"annotations": [],
 		"type": "Parquet",
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileSystem": "new"
+				"fileName": {
+					"value": "@concat(dataset().Table_Name,'/',formatDateTime(utcNow(),'yyyyMMddHHmmss'))",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@concat(dataset().Table_Name,'/',formatDateTime(utcnow(),'yyy/MM/dd'))\r\n\r\n",
+					"type": "Expression"
+				},
+				"fileSystem": "retaildata"
 			},
 			"compressionCodec": "snappy"
 		},

@@ -54,7 +54,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"expression": {
-						"value": "@or(equals(pipeline().parameters.lastupdate,null ),greater(int(activity('Lookup_child').output.firstRow.max),int(pipeline().parameters.lastupdate)))\n\n\n\n",
+						"value": "@or(equals(pipeline().parameters.lastupdate,null ),greater(int(coalesce(activity('Lookup_child').output.firstRow.max)),int(coalesce(pipeline().parameters.lastupdate))))\n\n\n\n",
 						"type": "Expression"
 					},
 					"ifTrueActivities": [

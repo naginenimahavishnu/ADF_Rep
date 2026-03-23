@@ -18,7 +18,7 @@
 					"source": {
 						"type": "SqlServerSource",
 						"sqlReaderQuery": {
-							"value": "select max(WatermarkColumn) as maxwc from (@{pipeline().parameters.TableSchema}.@{pipeline().parameters.TableName})",
+							"value": "select max(WatermarkColumn) as maxwc from @{pipeline().parameters.TableSchema}.@{pipeline().parameters.TableName}",
 							"type": "Expression"
 						},
 						"queryTimeout": "02:00:00",

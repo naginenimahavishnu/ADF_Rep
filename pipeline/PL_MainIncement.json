@@ -24,7 +24,7 @@
 						"referenceName": "DS_ONPRIMSQL_SRC",
 						"type": "DatasetReference"
 					},
-					"firstRowOnly": false
+					"firstRowOnly": true
 				}
 			},
 			{
@@ -44,6 +44,7 @@
 						"value": "@activity('Lookup_Watermarktable').output.value",
 						"type": "Expression"
 					},
+					"isSequential": false,
 					"activities": [
 						{
 							"name": "Execute Pipeline_ChildMAx",

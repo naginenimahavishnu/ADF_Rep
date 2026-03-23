@@ -29,7 +29,7 @@
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "Orderss"
+			"table": "ADF_Watermark_Table"
 		}
 	},
 	"type": "Microsoft.DataFactory/factories/datasets"

@@ -162,10 +162,6 @@
 									"WC": {
 										"value": "@pipeline().parameters.WatermarkColumn",
 										"type": "Expression"
-									},
-									"LLV": {
-										"value": "@pipeline().parameters.LastLoadValue",
-										"type": "Expression"
 									}
 								}
 							}

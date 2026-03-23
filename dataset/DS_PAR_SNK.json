@@ -16,7 +16,7 @@
 			"location": {
 				"type": "AzureBlobFSLocation",
 				"fileName": {
-					"value": "@concat(dataset().Table_Name,'UPDATE')",
+					"value": "@concat(dataset().Table_Name)",
 					"type": "Expression"
 				},
 				"folderPath": {

@@ -130,7 +130,7 @@
 							]
 						},
 						{
-							"name": "Execute Pipeline1",
+							"name": "Execute Pipelin_sp",
 							"type": "ExecutePipeline",
 							"dependsOn": [
 								{
@@ -145,7 +145,29 @@
 							},
 							"userProperties": [],
 							"typeProperties": {
-								"waitOnCompletion": true
+								"pipeline": {
+									"referenceName": "child_sp_2",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"SN": {
+										"value": "@pipeline().parameters.TableSchema",
+										"type": "Expression"
+									},
+									"TN": {
+										"value": "@pipeline().parameters.TableName",
+										"type": "Expression"
+									},
+									"WC": {
+										"value": "@pipeline().parameters.WatermarkColumn",
+										"type": "Expression"
+									},
+									"LLV": {
+										"value": "@pipeline().parameters.LastLoadValue",
+										"type": "Expression"
+									}
+								}
 							}
 						}
 					]

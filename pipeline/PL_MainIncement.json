@@ -24,7 +24,7 @@
 						"referenceName": "DS_ONPRIMSQL_SRC",
 						"type": "DatasetReference"
 					},
-					"firstRowOnly": true
+					"firstRowOnly": false
 				}
 			},
 			{

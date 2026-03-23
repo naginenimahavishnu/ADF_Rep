@@ -13,7 +13,52 @@
 					"secureOutput": false,
 					"secureInput": false
 				},
-				"userProperties": []
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": {
+							"value": "select max(WatermarkColumn) as maxwc from (@{pipeline().parameters.TableSchema}.@{pipeline().parameters.TableName})",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "DS_lookup_maxval",
+						"type": "DatasetReference",
+						"parameters": {
+							"tablename": {
+								"value": "@pipeline().parameters.TableName",
+								"type": "Expression"
+							},
+							"schemaname": {
+								"value": "@pipeline().parameters.TableSchema",
+								"type": "Expression"
+							}
+						}
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "If Check",
+				"type": "IfCondition",
+				"dependsOn": [
+					{
+						"activity": "Lookup_Max",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@or(equals(pipeline().parameters.LastLoadValue,0),greater(int(activity('Lookup_Max').output.maxwc),int(pipeline().parameters.LastLoadValue)))",
+						"type": "Expression"
+					}
+				}
 			}
 		],
 		"parameters": {
